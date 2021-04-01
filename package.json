@@ -33,7 +33,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint ./src",
-    "lint:fix": "esline --fix ./src"
+    "lint:fix": "eslint --fix ./src"
   },
   "eslintConfig": {
     "extends": [
