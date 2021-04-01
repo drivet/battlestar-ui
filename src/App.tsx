@@ -1,5 +1,3 @@
-import './App.css';
-
 import React from 'react';
 import {
   GoogleLogin,
@@ -7,8 +5,6 @@ import {
   GoogleLoginResponseOffline,
   GoogleLogout,
 } from 'react-google-login';
-
-import logo from './logo.svg';
 
 interface State {
   isAuthenticated: boolean;
@@ -34,20 +30,8 @@ export class App extends React.Component<unknown, State> {
   private app() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <header className="App-header">This is a header</header>
+        And here is some text
       </div>
     );
   }
