@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   GoogleLogin,
   GoogleLoginResponse,
@@ -6,28 +6,10 @@ import {
   GoogleLogout,
 } from 'react-google-login';
 
-interface State {
-  isAuthenticated: boolean;
-}
+export function App(): JSX.Element {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-export class App extends React.Component<unknown, State> {
-  constructor(props: unknown) {
-    super(props);
-    this.state = {
-      isAuthenticated: false,
-    };
-  }
-
-  render(): JSX.Element {
-    return (
-      <div>
-        {this.loginStuff()}
-        {this.state.isAuthenticated ? this.app() : null}
-      </div>
-    );
-  }
-
-  private app() {
+  function app() {
     return (
       <div className="App">
         <header className="App-header">This is a header</header>
@@ -36,13 +18,13 @@ export class App extends React.Component<unknown, State> {
     );
   }
 
-  private loginStuff() {
-    if (this.state.isAuthenticated) {
+  function loginStuff() {
+    if (isAuthenticated) {
       return (
         <GoogleLogout
           clientId="697453209068-7tulp9hdi8udrpl8j1n792f2olqp1uln.apps.googleusercontent.com"
           buttonText="Logout"
-          onLogoutSuccess={() => this.onLogout()}
+          onLogoutSuccess={() => onLogout()}
         />
       );
     } else {
@@ -51,32 +33,38 @@ export class App extends React.Component<unknown, State> {
           clientId="697453209068-7tulp9hdi8udrpl8j1n792f2olqp1uln.apps.googleusercontent.com"
           buttonText="Login"
           onSuccess={(response: GoogleLoginResponse | GoogleLoginResponseOffline) =>
-            this.onSuccess(response)
+            onSuccess(response)
           }
           cookiePolicy={'single_host_origin'}
-          onFailure={(response: any) => this.onFailure(response)}
+          onFailure={(response: any) => onFailure(response)}
           isSignedIn={true}
         />
       );
     }
   }
 
-  private onLogout() {
+  function onLogout() {
     // eslint-disable-next-line no-console
     console.log('logged out');
-    this.setState({ isAuthenticated: false });
+    setIsAuthenticated(false);
   }
 
-  private onSuccess(response: GoogleLoginResponse | GoogleLoginResponseOffline) {
+  function onSuccess(response: GoogleLoginResponse | GoogleLoginResponseOffline) {
     // eslint-disable-next-line no-console
     console.log(response);
-    this.setState({ isAuthenticated: true });
+    setIsAuthenticated(true);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private onFailure(response: any) {
+  function onFailure(response: any) {
     // eslint-disable-next-line no-console
     console.log(response);
-    this.setState({ isAuthenticated: false });
+    setIsAuthenticated(false);
   }
+  return (
+    <div>
+      {loginStuff()}
+      {isAuthenticated ? app() : null}
+    </div>
+  );
 }
