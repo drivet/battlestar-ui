@@ -1,14 +1,34 @@
+import { Link } from 'react-router-dom';
+
 import { useAuth } from '../auth/AuthProvider';
-import { AuthButton } from './AuthButton';
-import { OpenApp } from './OpenApp';
+
+function OpenAppLink(): JSX.Element {
+  return (
+    <div>
+      <Link className="button" to="/current-tables">
+        <span className="buttonText">Open App</span>
+      </Link>
+    </div>
+  );
+}
+
+function LoginLink(): JSX.Element {
+  return (
+    <div>
+      <Link className="button" to="/login">
+        <span className="buttonText">Login</span>
+      </Link>
+    </div>
+  );
+}
 
 export function Landing(): JSX.Element {
-  const [authInfo, setAuthInfo] = useAuth();
+  const auth = useAuth();
 
   return (
     <div>
       <header>Welcome to Battlestar Galactica!</header>
-      <div>{authInfo.isAuthenticated ? <AuthButton setAuthInfo={setAuthInfo} /> : <OpenApp />}</div>
+      <div>{auth.authInfo.isAuthenticated ? <OpenAppLink /> : <LoginLink />}</div>
     </div>
   );
 }

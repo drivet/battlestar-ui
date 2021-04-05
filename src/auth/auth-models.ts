@@ -16,4 +16,8 @@ export const DEFAULT_AUTH_INFO: AuthInfo = {
   isAuthenticated: false,
 };
 
-export type AuthInfoState = [AuthInfo, React.Dispatch<React.SetStateAction<AuthInfo>>];
+export interface AuthContextState {
+  authInfo: AuthInfo;
+  signIn: (cb: () => void) => void;
+  signOut: (cb: () => void) => void;
+}
