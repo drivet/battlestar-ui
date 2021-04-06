@@ -1,6 +1,6 @@
 import { useHistory } from 'react-router-dom';
 
-import { useAuth } from '../auth/AuthProvider';
+import { useAuth } from '../common/AuthProvider';
 
 export function LogoutLink(): JSX.Element {
   const auth = useAuth();

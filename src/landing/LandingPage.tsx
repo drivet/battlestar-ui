@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 
-import { useAuth } from '../auth/AuthProvider';
+import { useAuth } from '../common/AuthProvider';
 
 function OpenAppLink(): JSX.Element {
   return (
     <div>
-      <Link className="button" to="/current-tables">
+      <Link className="button" to="/current-games">
         <span className="buttonText">Open App</span>
       </Link>
     </div>
@@ -22,7 +22,7 @@ function LoginLink(): JSX.Element {
   );
 }
 
-export function Landing(): JSX.Element {
+export function LandingPage(): JSX.Element {
   const auth = useAuth();
 
   return (

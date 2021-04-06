@@ -3,12 +3,12 @@ import './App.css';
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import { AuthProvider } from './auth/AuthProvider';
-import { Login } from './auth/Login';
-import { PrivateRoute } from './auth/PrivateRoute';
-import { Landing } from './landing/Landing';
-import { CurrentTables } from './tables/CurrentTables';
-import { SentInvites } from './tables/SentInvites';
+import { AuthProvider } from './common/AuthProvider';
+import { LoginPage } from './auth/LoginPage';
+import { PrivateRoute } from './common/PrivateRoute';
+import { LandingPage } from './landing/LandingPage';
+import { CurrentTablesPage } from './tables/CurrentTablesPage';
+import { SentInvitesPage } from './tables/SentInvitesPage';
 
 export function App(): JSX.Element {
   return (
@@ -17,16 +17,16 @@ export function App(): JSX.Element {
         <BrowserRouter>
           <Switch>
             <Route exact path="/">
-              <Landing />
+              <LandingPage />
             </Route>
             <Route exact path="/login">
-              <Login />
+              <LoginPage />
             </Route>
-            <PrivateRoute exact path="/current-tables">
-              <CurrentTables />
+            <PrivateRoute exact path="/current-games">
+              <CurrentTablesPage />
             </PrivateRoute>
             <PrivateRoute exact path="/sent-invites">
-              <SentInvites />
+              <SentInvitesPage />
             </PrivateRoute>
           </Switch>
         </BrowserRouter>

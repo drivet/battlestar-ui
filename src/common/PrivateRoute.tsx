@@ -1,8 +1,8 @@
 import { Location } from 'history';
 import { Redirect, Route } from 'react-router-dom';
 
-import { LocationState } from '../utils/models';
 import { useAuth } from './AuthProvider';
+import { LocationState } from './models';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function redirectFrom(location: Location<LocationState>): JSX.Element {
