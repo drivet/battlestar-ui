@@ -21,12 +21,16 @@ function redirectFrom(location: Location<LocationState>): JSX.Element {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function PrivateRoute({ children, ...rest }): JSX.Element {
   const auth = useAuth();
-  return (
-    <Route
-      {...rest}
-      render={({ location }) =>
-        auth.authInfo.profile ? children : redirectFrom(location as Location<LocationState>)
-      }
-    />
-  );
+  if (auth && auth.authInfo) {
+    return (
+      <Route
+        {...rest}
+        render={({ location }) =>
+          auth.authInfo.profile ? children : redirectFrom(location as Location<LocationState>)
+        }
+      />
+    );
+  } else {
+    return <Route></Route>;
+  }
 }

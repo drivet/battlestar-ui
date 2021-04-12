@@ -11,7 +11,7 @@ export function LoginPage(): JSX.Element {
   const { from } = location.state || { from: { pathname: '/current-games' } };
 
   const login = () => {
-    auth.signIn(() => {
+    auth?.signIn(() => {
       history.replace(from);
     });
   };

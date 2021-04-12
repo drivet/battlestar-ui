@@ -28,7 +28,7 @@ export function LandingPage(): JSX.Element {
   return (
     <div>
       <header>Welcome to Battlestar Galactica!</header>
-      <div>{auth.authInfo.isAuthenticated ? <OpenAppLink /> : <LoginLink />}</div>
+      <div>{auth?.authInfo?.isAuthenticated ? <OpenAppLink /> : <LoginLink />}</div>
     </div>
   );
 }

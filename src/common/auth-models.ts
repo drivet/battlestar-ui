@@ -12,10 +12,6 @@ export interface AuthInfo {
   profile?: Profile;
 }
 
-export const DEFAULT_AUTH_INFO: AuthInfo = {
-  isAuthenticated: false,
-};
-
 export interface Session {
   access_token: string;
 }

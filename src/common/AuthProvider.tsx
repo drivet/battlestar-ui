@@ -6,10 +6,14 @@ import {
   useGoogleLogout,
 } from 'react-google-login';
 
-import { AuthContextState, DEFAULT_AUTH_INFO, Profile } from './auth-models';
+import { AuthContextState, AuthInfo, Profile } from './auth-models';
 
 type AllGoogleLoginResponse = GoogleLoginResponse | GoogleLoginResponseOffline;
 type CallbackFn = () => void;
+
+const AUTH_INFO_UNAUTHENTICATED: AuthInfo = {
+  isAuthenticated: false,
+};
 
 function makeProfile(response: GoogleLoginResponse): Profile {
   return {
@@ -22,19 +26,33 @@ function makeProfile(response: GoogleLoginResponse): Profile {
   };
 }
 
-export const AuthContext = React.createContext((undefined as unknown) as AuthContextState);
+function useAuthLogout(setAuthInfo: React.Dispatch<React.SetStateAction<AuthInfo>>) {
+  let signOutCb: CallbackFn | undefined = undefined;
 
-export function useAuth(): AuthContextState {
-  const context = React.useContext(AuthContext);
-  if (!context) {
-    throw new Error(`useAuth must be used within a AuthProvider`);
+  function onSignOutSuccess() {
+    // eslint-disable-next-line no-console
+    console.log('Successfuly logged out');
+    setAuthInfo(AUTH_INFO_UNAUTHENTICATED);
+    if (signOutCb) {
+      signOutCb();
+      signOutCb = undefined;
+    }
   }
-  return context;
+
+  const { signOut } = useGoogleLogout({
+    clientId: '697453209068-7tulp9hdi8udrpl8j1n792f2olqp1uln.apps.googleusercontent.com',
+    onLogoutSuccess: onSignOutSuccess,
+    onFailure: () => setAuthInfo(AUTH_INFO_UNAUTHENTICATED),
+  });
+
+  const authLogout = (cb: CallbackFn) => {
+    signOutCb = cb;
+    signOut();
+  };
+  return authLogout;
 }
 
-export function AuthProvider(props: any): JSX.Element {
-  const [authInfo, setAuthInfo] = React.useState(DEFAULT_AUTH_INFO);
-
+function useAuthLogin(setAuthInfo: React.Dispatch<React.SetStateAction<AuthInfo>>) {
   let signInCb: CallbackFn | undefined = undefined;
 
   function onSignInSuccess(response: AllGoogleLoginResponse) {
@@ -53,10 +71,19 @@ export function AuthProvider(props: any): JSX.Element {
     }
   }
 
+  function onAutoLoadFinished(authenticated: boolean) {
+    if (!authenticated) {
+      setAuthInfo({ isAuthenticated: false });
+    }
+    // we don't handle authenticated = true here because the
+    // onSucess callback should do it
+  }
+
   const { signIn } = useGoogleLogin({
     clientId: '697453209068-7tulp9hdi8udrpl8j1n792f2olqp1uln.apps.googleusercontent.com',
     onSuccess: onSignInSuccess,
-    onFailure: () => setAuthInfo(DEFAULT_AUTH_INFO),
+    onAutoLoadFinished: onAutoLoadFinished,
+    onFailure: () => setAuthInfo(AUTH_INFO_UNAUTHENTICATED),
     isSignedIn: true,
     cookiePolicy: 'single_host_origin',
   });
@@ -65,30 +92,23 @@ export function AuthProvider(props: any): JSX.Element {
     signInCb = cb;
     signIn();
   };
+  return authLogin;
+}
 
-  let signOutCb: CallbackFn | undefined = undefined;
+export const AuthContext = React.createContext((undefined as unknown) as AuthContextState);
 
-  function onSignOutSuccess() {
-    // eslint-disable-next-line no-console
-    console.log('Successfuly logged out');
-    setAuthInfo(DEFAULT_AUTH_INFO);
-    if (signOutCb) {
-      signOutCb();
-      signOutCb = undefined;
-    }
+export function useAuth(): AuthContextState {
+  const context = React.useContext(AuthContext);
+  if (!context) {
+    throw new Error(`useAuth must be used within a AuthProvider`);
   }
+  return context;
+}
 
-  const { signOut } = useGoogleLogout({
-    clientId: '697453209068-7tulp9hdi8udrpl8j1n792f2olqp1uln.apps.googleusercontent.com',
-    onLogoutSuccess: onSignOutSuccess,
-    onFailure: () => setAuthInfo(DEFAULT_AUTH_INFO),
-  });
-
-  const authLogout = (cb: CallbackFn) => {
-    signOutCb = cb;
-    signOut();
-  };
-
+export function AuthProvider(props: any): JSX.Element {
+  const [authInfo, setAuthInfo] = React.useState((undefined as unknown) as AuthInfo);
+  const authLogin = useAuthLogin(setAuthInfo);
+  const authLogout = useAuthLogout(setAuthInfo);
   const authState = {
     authInfo,
     signIn: authLogin,

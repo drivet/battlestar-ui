@@ -7,7 +7,7 @@ export function LogoutLink(): JSX.Element {
   const history = useHistory();
 
   const logout = () => {
-    auth.signOut(() => {
+    auth?.signOut(() => {
       history.replace({ pathname: '/' });
     });
   };
