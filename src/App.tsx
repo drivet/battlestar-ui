@@ -12,25 +12,23 @@ import { SentInvitesPage } from './tables/SentInvitesPage';
 
 export function App(): JSX.Element {
   return (
-    <React.StrictMode>
-      <AuthProvider>
-        <BrowserRouter>
-          <Switch>
-            <Route exact path="/">
-              <LandingPage />
-            </Route>
-            <Route exact path="/login">
-              <LoginPage />
-            </Route>
-            <PrivateRoute exact path="/current-games">
-              <CurrentTablesPage />
-            </PrivateRoute>
-            <PrivateRoute exact path="/sent-invites">
-              <SentInvitesPage />
-            </PrivateRoute>
-          </Switch>
-        </BrowserRouter>
-      </AuthProvider>
-    </React.StrictMode>
+    <AuthProvider>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/">
+            <LandingPage />
+          </Route>
+          <Route exact path="/login">
+            <LoginPage />
+          </Route>
+          <PrivateRoute exact path="/current-games">
+            <CurrentTablesPage />
+          </PrivateRoute>
+          <PrivateRoute exact path="/sent-invites">
+            <SentInvitesPage />
+          </PrivateRoute>
+        </Switch>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }

@@ -16,6 +16,10 @@ export const DEFAULT_AUTH_INFO: AuthInfo = {
   isAuthenticated: false,
 };
 
+export interface Session {
+  access_token: string;
+}
+
 export interface AuthContextState {
   authInfo: AuthInfo;
   signIn: (cb: () => void) => void;
