@@ -29,6 +29,9 @@ export const Page: React.FC = ({ children }) => {
         <NavLink to="/sent-invites" className="nav__item">
           Sent Invites
         </NavLink>
+        <NavLink to="/received-invites" className="nav__item">
+          Received Invites
+        </NavLink>
         <div className="nav__item">
           <LogoutLink />
         </div>

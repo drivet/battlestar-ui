@@ -10,6 +10,7 @@ export interface Profile {
 export interface AuthInfo {
   isAuthenticated: boolean;
   profile?: Profile;
+  authToken?: string;
 }
 
 export interface Session {

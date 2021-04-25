@@ -6,7 +6,10 @@ import {
   useGoogleLogout,
 } from 'react-google-login';
 
+import { validateIdToken } from '../services/token-service';
 import { AuthContextState, AuthInfo, Profile } from './auth-models';
+
+const CLIENT_ID = '697453209068-7tulp9hdi8udrpl8j1n792f2olqp1uln.apps.googleusercontent.com';
 
 type AllGoogleLoginResponse = GoogleLoginResponse | GoogleLoginResponseOffline;
 type CallbackFn = () => void;
@@ -40,7 +43,7 @@ function useAuthLogout(setAuthInfo: React.Dispatch<React.SetStateAction<AuthInfo
   }
 
   const { signOut } = useGoogleLogout({
-    clientId: '697453209068-7tulp9hdi8udrpl8j1n792f2olqp1uln.apps.googleusercontent.com',
+    clientId: CLIENT_ID,
     onLogoutSuccess: onSignOutSuccess,
     onFailure: () => setAuthInfo(AUTH_INFO_UNAUTHENTICATED),
   });
@@ -55,15 +58,21 @@ function useAuthLogout(setAuthInfo: React.Dispatch<React.SetStateAction<AuthInfo
 function useAuthLogin(setAuthInfo: React.Dispatch<React.SetStateAction<AuthInfo>>) {
   let signInCb: CallbackFn | undefined = undefined;
 
-  function onSignInSuccess(response: AllGoogleLoginResponse) {
+  async function onSignInSuccess(response: AllGoogleLoginResponse) {
     // eslint-disable-next-line no-console
     console.log(response);
     if (response.code) {
       throw Error('You are offline, cannot authenticate');
     }
+    const loginResponse = response as GoogleLoginResponse;
+    const authTokenResponse = await validateIdToken(loginResponse.getAuthResponse().id_token);
+    if (!authTokenResponse.data) {
+      throw Error('missing auth token');
+    }
     setAuthInfo({
       isAuthenticated: true,
-      profile: makeProfile(response as GoogleLoginResponse),
+      profile: makeProfile(loginResponse),
+      authToken: authTokenResponse.data,
     });
     if (signInCb) {
       signInCb();
@@ -73,14 +82,14 @@ function useAuthLogin(setAuthInfo: React.Dispatch<React.SetStateAction<AuthInfo>
 
   function onAutoLoadFinished(authenticated: boolean) {
     if (!authenticated) {
-      setAuthInfo({ isAuthenticated: false });
+      setAuthInfo(AUTH_INFO_UNAUTHENTICATED);
     }
     // we don't handle authenticated = true here because the
     // onSucess callback should do it
   }
 
   const { signIn } = useGoogleLogin({
-    clientId: '697453209068-7tulp9hdi8udrpl8j1n792f2olqp1uln.apps.googleusercontent.com',
+    clientId: CLIENT_ID,
     onSuccess: onSignInSuccess,
     onAutoLoadFinished: onAutoLoadFinished,
     onFailure: () => setAuthInfo(AUTH_INFO_UNAUTHENTICATED),

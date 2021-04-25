@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../common/AuthProvider';
 import { Page } from '../common/Page';
 import { Table } from '../services/table-models';
-import { getCurrentTables } from '../services/table-service';
+import { getRecievedInvites } from '../services/table-service';
 
-export function CurrentTablesPage(): JSX.Element {
+export function ReceivedInvitesPage(): JSX.Element {
   const { authInfo } = useAuth();
   const [tables, setTables] = useState<Table[]>([]);
 
@@ -14,7 +14,7 @@ export function CurrentTablesPage(): JSX.Element {
       if (!authInfo.authToken || !authInfo.profile) {
         return;
       }
-      setTables(await getCurrentTables(authInfo.authToken, authInfo.profile.id));
+      setTables(await getRecievedInvites(authInfo.authToken, authInfo.profile.id));
     }
     fetchAndSet();
   }, []);

@@ -8,6 +8,7 @@ import { AuthProvider } from './common/AuthProvider';
 import { PrivateRoute } from './common/PrivateRoute';
 import { LandingPage } from './landing/LandingPage';
 import { CurrentTablesPage } from './tables/CurrentTablesPage';
+import { ReceivedInvitesPage } from './tables/ReceivedInvitesPage';
 import { SentInvitesPage } from './tables/SentInvitesPage';
 
 export function App(): JSX.Element {
@@ -26,6 +27,9 @@ export function App(): JSX.Element {
           </PrivateRoute>
           <PrivateRoute exact path="/sent-invites">
             <SentInvitesPage />
+          </PrivateRoute>
+          <PrivateRoute exact path="/received-invites">
+            <ReceivedInvitesPage />
           </PrivateRoute>
         </Switch>
       </BrowserRouter>
