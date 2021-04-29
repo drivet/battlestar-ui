@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 
 import { useAuth } from '../common/AuthProvider';
-import { Page } from '../common/Page';
 import { Table } from '../services/table-models';
 import { getCurrentTables } from '../services/table-service';
+import { TablePage } from './TablePage';
 
 export function CurrentTablesPage(): JSX.Element {
   const { authInfo } = useAuth();
@@ -19,5 +19,5 @@ export function CurrentTablesPage(): JSX.Element {
     fetchAndSet();
   }, []);
 
-  return <Page>Tables {tables ? tables.length : 0}</Page>;
+  return <TablePage>Tables {tables ? tables.length : 0}</TablePage>;
 }

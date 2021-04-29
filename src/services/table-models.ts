@@ -20,3 +20,9 @@ export interface Table {
 
   invitations?: Invite[];
 }
+
+export interface TableCreatePayload {
+  inviter: string;
+  seats: number;
+  bots: number;
+}

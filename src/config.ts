@@ -1,4 +1,4 @@
-const envVars = ['REACT_APP_BSG_API_BASE'] as const;
+const envVars = ['REACT_APP_BSG_API_BASE', 'REACT_APP_BSG_TOKEN_API_BASE'] as const;
 type EnvVarsType = typeof envVars[number];
 
 function getEnv(key: EnvVarsType) {
@@ -11,10 +11,12 @@ function getEnv(key: EnvVarsType) {
 
 export interface Config {
   apiBase: string;
+  tokenApiBase: string;
 }
 
 export function getConfig(): Config {
   return {
     apiBase: getEnv('REACT_APP_BSG_API_BASE'),
+    tokenApiBase: getEnv('REACT_APP_BSG_TOKEN_API_BASE'),
   };
 }

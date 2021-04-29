@@ -1,6 +1,7 @@
+import React from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 
-import { useAuth } from './AuthProvider';
+import { useAuth } from '../common/AuthProvider';
 
 export function LogoutLink(): JSX.Element {
   const auth = useAuth();
@@ -19,10 +20,13 @@ export function LogoutLink(): JSX.Element {
   );
 }
 
-export const Page: React.FC = ({ children }) => {
+export const TablePage: React.FC = ({ children }) => {
   return (
     <div className="page">
       <nav className="nav page__nav">
+        <NavLink to="/" className="nav__item">
+          Home
+        </NavLink>
         <NavLink to="/current-games" className="nav__item">
           Current Games
         </NavLink>

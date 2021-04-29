@@ -5,5 +5,5 @@ import { getConfig } from '../config';
 const config = getConfig();
 
 export async function validateIdToken(idToken: string): Promise<AxiosResponse> {
-  return await axios.post(`${config.apiBase}/tokens/sessions`, `idtoken=${idToken}`);
+  return await axios.post(`${config.tokenApiBase}/tokens/sessions`, `idtoken=${idToken}`);
 }

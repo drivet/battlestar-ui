@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { getConfig } from '../config';
-import { Table } from './table-models';
+import { Table, TableCreatePayload } from './table-models';
 
 const config = getConfig();
 
@@ -13,12 +13,24 @@ export async function getCurrentTables(authToken: string, user: string): Promise
 
 export async function getSentInvites(authToken: string, inviter: string): Promise<Table[]> {
   const res = await fetchSent(authToken, inviter);
-  return res.data.filter(isPending);
+  return res.data.filter((t) => !isAccepted(t));
 }
 
 export async function getRecievedInvites(authToken: string, invitee: string): Promise<Table[]> {
   const res = await fetchRecieved(authToken, invitee);
-  return res.data.filter(isPending);
+  return res.data.filter((t) => !isAccepted(t));
+}
+
+export async function createTable(
+  authToken: string,
+  inviter: string,
+  seats: number,
+  bots: number
+): Promise<Table> {
+  if (bots > seats - 1) {
+    throw new Error('Invites not supported yet');
+  }
+  return sendCreate(authToken, { seats, inviter, bots });
 }
 
 function fetchRecieved(authToken: string, invitee: string): Promise<AxiosResponse<Table[]>> {
@@ -29,12 +41,15 @@ function fetchSent(authToken: string, inviter: string): Promise<AxiosResponse<Ta
   return axios.get(`${config.apiBase}/tables?inviter=${inviter}`, reqConfig(authToken));
 }
 
-function isAccepted(table: Table): boolean {
-  return !!table.invitations && table.invitations.every((invite) => invite.status === 'accepted');
+function sendCreate(authToken: string, tableCreatePayload: TableCreatePayload): Promise<Table> {
+  return axios.post(`${config.apiBase}/tables`, tableCreatePayload, reqConfig(authToken));
 }
 
-function isPending(table: Table): boolean {
-  return !!table.invitations && table.invitations.some((invite) => invite.status !== 'accepted');
+function isAccepted(table: Table): boolean {
+  const acceptedInvites = table.invitations
+    ? table.invitations.filter((invite) => invite.status === 'accepted').length
+    : 0;
+  return 1 + acceptedInvites + table.bots === table.seats;
 }
 
 function reqConfig(authToken: string | undefined): AxiosRequestConfig {
