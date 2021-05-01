@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { useAuth } from '../common/AuthProvider';
+import { useFirebaseAuth } from '../firebase/firebase-auth';
 
 function OpenAppLink(): JSX.Element {
   return (
@@ -16,19 +16,37 @@ function LoginLink(): JSX.Element {
   return (
     <div>
       <Link className="button" to="/login">
-        <span className="buttonText">Login</span>
+        <span className="buttonText">Sign in</span>
+      </Link>
+    </div>
+  );
+}
+
+function JoinLink(): JSX.Element {
+  return (
+    <div>
+      <Link className="button" to="/join">
+        <span className="buttonText">Sign up</span>
       </Link>
     </div>
   );
 }
 
 export function LandingPage(): JSX.Element {
-  const auth = useAuth();
-
+  const user = useFirebaseAuth();
   return (
     <div>
       <header>Welcome to Battlestar Galactica!</header>
-      <div>{auth?.authInfo?.isAuthenticated ? <OpenAppLink /> : <LoginLink />}</div>
+      <div>
+        {user ? (
+          <OpenAppLink />
+        ) : (
+          <div>
+            <LoginLink />
+            <JoinLink />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,20 +1,19 @@
 import { useEffect, useState } from 'react';
 
-import { useAuth } from '../common/AuthProvider';
+import { useFirebaseAuth } from '../firebase/firebase-auth';
 import { Table } from '../services/table-models';
 import { getRecievedInvites } from '../services/table-service';
 import { TablePage } from './TablePage';
 
 export function ReceivedInvitesPage(): JSX.Element {
-  const { authInfo } = useAuth();
+  const user = useFirebaseAuth();
   const [tables, setTables] = useState<Table[]>([]);
 
   useEffect(() => {
     async function fetchAndSet() {
-      if (!authInfo.authToken || !authInfo.profile) {
-        return;
+      if (user) {
+        setTables(await getRecievedInvites(await user.getIdToken(), user.uid));
       }
-      setTables(await getRecievedInvites(authInfo.authToken, authInfo.profile.id));
     }
     fetchAndSet();
   }, []);

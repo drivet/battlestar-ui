@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { useAuth } from '../common/AuthProvider';
+import { useFirebaseAuth } from '../firebase/firebase-auth';
 import { Table } from '../services/table-models';
 import { getSentInvites } from '../services/table-service';
 import { TablePage } from './TablePage';
@@ -44,16 +44,15 @@ function createButton(): JSX.Element {
 }
 
 export function SentInvitesPage(): JSX.Element {
-  const { authInfo } = useAuth();
+  const user = useFirebaseAuth();
   const [tables, setTables] = useState<Table[]>([]);
 
   useEffect(() => {
     async function fetchAndSet() {
-      if (!authInfo.authToken || !authInfo.profile) {
-        return;
+      if (user) {
+        const data = await getSentInvites(await user.getIdToken(true), user.uid);
+        setTables(data);
       }
-      const data = await getSentInvites(authInfo.authToken, authInfo.profile.id);
-      setTables(data);
     }
     fetchAndSet();
   }, []);

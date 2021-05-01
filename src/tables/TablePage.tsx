@@ -1,20 +1,10 @@
+import firebase from 'firebase';
 import React from 'react';
-import { NavLink, useHistory } from 'react-router-dom';
-
-import { useAuth } from '../common/AuthProvider';
+import { NavLink } from 'react-router-dom';
 
 export function LogoutLink(): JSX.Element {
-  const auth = useAuth();
-  const history = useHistory();
-
-  const logout = () => {
-    auth?.signOut(() => {
-      history.replace({ pathname: '/' });
-    });
-  };
-
   return (
-    <button onClick={logout} className="logoutLink">
+    <button onClick={() => firebase.auth().signOut()} className="logoutLink">
       <span className="logoutLink__buttonText">Sign out</span>
     </button>
   );

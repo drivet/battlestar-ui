@@ -1,20 +1,20 @@
 import { useState } from 'react';
 
-import { useAuth } from '../common/AuthProvider';
+import { useFirebaseAuth } from '../firebase/firebase-auth';
 import { createTable } from '../services/table-service';
 import { TablePage } from './TablePage';
 
 export function CreateTablePage(): JSX.Element {
   const [players, setPlayers] = useState(3);
   const [bots, setBots] = useState(0);
-  const { authInfo } = useAuth();
+  const user = useFirebaseAuth();
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (!authInfo.authToken || !authInfo.profile) {
-      throw new Error('missing auth info');
+    if (!user) {
+      throw new Error('user not signed in');
     }
-    createTable(authInfo.authToken, authInfo.profile.id, players, bots);
+    createTable(await user.getIdToken(true), user.uid, players, bots);
   }
 
   return (
