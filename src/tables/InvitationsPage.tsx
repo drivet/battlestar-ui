@@ -11,7 +11,11 @@ export function InvitationsPage(): JSX.Element {
   const user = useFirebaseAuth();
   const [tables, setTables] = useState<Table[]>([]);
   const [selectedTab, setSelectedTab] = useState<number>(0);
-  const [loading, setIsLoading] = useState<boolean>(false);
+  const [loading, setIsLoading] = useState<boolean>(true);
+
+  function loadingInd() {
+    return <div>Loading...</div>;
+  }
 
   function renderTab(): JSX.Element {
     return selectedTab === 0 ? (
@@ -40,10 +44,9 @@ export function InvitationsPage(): JSX.Element {
 
   async function refresh() {
     if (user) {
-      setIsLoading(true);
       const tables = await getTables(await user.getIdToken(true));
-      setIsLoading(false);
       setTables(tables);
+      setIsLoading(false);
     }
   }
 
@@ -63,14 +66,7 @@ export function InvitationsPage(): JSX.Element {
           </li>
         </ul>
       </div>
-
-      {loading ? (
-        <span className="icon">
-          <i className="fas fa-spinner"></i>
-        </span>
-      ) : (
-        renderTab()
-      )}
+      {loading ? loadingInd() : renderTab()}
     </Page>
   );
 }

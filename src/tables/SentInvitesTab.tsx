@@ -46,7 +46,7 @@ export function SentInvitesTab(props: SentInvitesProps): JSX.Element {
     return (
       <tr>
         <td>
-          <button className="delete" onClick={(_e) => props.onDelete(table._id)} />
+          <button className="delete is-loading" onClick={(_e) => props.onDelete(table._id)} />
         </td>
         <td>{formatDate(table.createdAt)}</td>
         <td>{table.seats}</td>
