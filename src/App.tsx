@@ -8,9 +8,7 @@ import { LoginPage } from './auth/LoginPage';
 import { PrivateRoute } from './common/PrivateRoute';
 import { LandingPage } from './landing/LandingPage';
 import { CreateTablePage } from './tables/CreateTablePage';
-import { CurrentTablesPage } from './tables/CurrentTablesPage';
-import { ReceivedInvitesPage } from './tables/ReceivedInvitesPage';
-import { SentInvitesPage } from './tables/SentInvitesPage';
+import { InvitationsPage } from './tables/InvitationsPage';
 
 export function App(): JSX.Element {
   return (
@@ -25,14 +23,8 @@ export function App(): JSX.Element {
         <Route exact path="/join">
           <JoinPage />
         </Route>
-        <PrivateRoute exact path="/current-games">
-          <CurrentTablesPage />
-        </PrivateRoute>
-        <PrivateRoute exact path="/sent-invites">
-          <SentInvitesPage />
-        </PrivateRoute>
-        <PrivateRoute exact path="/received-invites">
-          <ReceivedInvitesPage />
+        <PrivateRoute exact path="/invitations">
+          <InvitationsPage />
         </PrivateRoute>
         <PrivateRoute exact path="/create-table">
           <CreateTablePage />

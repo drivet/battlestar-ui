@@ -1,15 +1,1 @@
-.page {
-  padding: 0.5em;
-}
-
-.nav {
-  display: flex;
-}
-
-.page__nav {
-  margin-bottom: 1em;
-}
-
-.nav__item {
-  margin-right: 1em;
-}
+@import "https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css";

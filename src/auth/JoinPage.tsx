@@ -53,5 +53,5 @@ export function JoinPage(): JSX.Element {
     );
   }
 
-  return isEmailSent ? successJoin() : joinForm();
+  return <div>{isEmailSent ? successJoin() : joinForm()}</div>;
 }

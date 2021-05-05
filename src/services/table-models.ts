@@ -8,7 +8,8 @@ export interface Invite {
 
 export interface Table {
   _id: string;
-  createdAt: Date;
+
+  createdAt: string;
 
   inviter: string;
 
