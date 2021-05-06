@@ -19,7 +19,7 @@ const uiConfig = {
 export function LoginPage(): JSX.Element {
   const user = useFirebaseAuth();
   if (user) {
-    return <Redirect to="/current-games" />;
+    return <Redirect to="/invitations" />;
   }
   return (
     <div>

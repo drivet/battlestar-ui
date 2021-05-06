@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 
 import { useFirebaseAuth } from '../firebase/firebase-auth';
 import { Page } from '../Page';
-import { Table } from '../services/table-models';
-import { deleteTable, getTables } from '../services/table-service';
 import { ReceivedInvitesTab } from './ReceivedInvitesTab';
 import { SentInvitesTab } from './SentInvitesTab';
+import { Table } from './table-models';
+import { deleteTable, getTables } from './table-service';
 
 export function InvitationsPage(): JSX.Element {
   const user = useFirebaseAuth();

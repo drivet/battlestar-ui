@@ -18,6 +18,9 @@ export const Page: React.FC = ({ children }) => {
             </NavLink>
           </div>
           <div className="navbar-end">
+            <NavLink className="navbar-item" to="/profile">
+              Profile
+            </NavLink>
             <a className="navbar-item" onClick={() => firebase.auth().signOut()}>
               Sign out
             </a>

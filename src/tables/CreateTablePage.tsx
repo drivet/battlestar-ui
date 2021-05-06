@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 import { useFirebaseAuth } from '../firebase/firebase-auth';
 import { Page } from '../Page';
-import { createTable } from '../services/table-service';
+import { createTable } from './table-service';
 
 export function CreateTablePage(): JSX.Element {
   const [players, setPlayers] = useState(3);

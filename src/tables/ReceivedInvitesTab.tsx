@@ -1,4 +1,4 @@
-import { Table } from '../services/table-models';
+import { Table } from './table-models';
 
 export interface ReceivedInvitesProps {
   tables: Table[];

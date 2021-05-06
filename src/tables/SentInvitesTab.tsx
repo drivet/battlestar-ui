@@ -1,7 +1,8 @@
 import { format } from 'date-fns';
 import { NavLink } from 'react-router-dom';
 
-import { Table } from '../services/table-models';
+import { GuestList } from './GuestList';
+import { Table } from './table-models';
 
 function formatDate(dateStr: string): string {
   return format(new Date(dateStr), 'yyyy-MM-dd HH:mm:ss');
@@ -51,7 +52,9 @@ export function SentInvitesTab(props: SentInvitesProps): JSX.Element {
         <td>{formatDate(table.createdAt)}</td>
         <td>{table.seats}</td>
         <td>{table.bots}</td>
-        <td>{table.bots}</td>
+        <td>
+          <GuestList table={table} />
+        </td>
       </tr>
     );
   }
