@@ -19,7 +19,7 @@ export function InvitationsPage(): JSX.Element {
 
   function renderTab(): JSX.Element {
     return selectedTab === 0 ? (
-      <SentInvitesTab tables={extractSent()} onDelete={handleDelete} />
+      <SentInvitesTab tables={extractSent()} onDelete={handleDelete} onInvite={() => refresh()} />
     ) : (
       <ReceivedInvitesTab tables={extractReceived()} />
     );

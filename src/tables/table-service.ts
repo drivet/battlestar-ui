@@ -26,6 +26,18 @@ export async function deleteTable(authToken: string, id: string): Promise<AxiosR
   return axios.delete(`${config.apiBase}/tables/${id}`, reqConfig(authToken));
 }
 
+export async function createInvite(
+  authToken: string,
+  id: string,
+  invited: string
+): Promise<AxiosResponse> {
+  return axios.put(
+    `${config.apiBase}/tables/${id}/invitations/${invited}`,
+    {},
+    reqConfig(authToken)
+  );
+}
+
 function reqConfig(authToken: string | undefined): AxiosRequestConfig {
   if (!authToken) {
     return {};

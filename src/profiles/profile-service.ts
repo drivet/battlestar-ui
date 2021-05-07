@@ -18,6 +18,21 @@ export async function getProfile(authToken: string, id: string): Promise<Profile
   }
 }
 
+export async function getProfileByNickname(
+  authToken: string,
+  nickname: string
+): Promise<Profile | null> {
+  const res = await axios.get(
+    `${config.apiBase}/profiles?nickname=${nickname}`,
+    reqConfig(authToken)
+  );
+  const profiles = res.data;
+  if (profiles.length === 0) {
+    return null;
+  }
+  return profiles[0];
+}
+
 export async function updateProfile(
   authToken: string,
   body: ProfileUpdatePayload,

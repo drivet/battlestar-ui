@@ -3,11 +3,16 @@ import { canInvite } from './table-utils';
 
 export interface GuestListProps {
   table: Table;
+  inviteFn: () => void;
 }
 
 export function GuestList(props: GuestListProps): JSX.Element {
   function inviteButton(): JSX.Element {
-    return <button className="button is-small">Invite</button>;
+    return (
+      <button className="button is-small" onClick={() => props.inviteFn()}>
+        Invite
+      </button>
+    );
   }
 
   function inviteLine(invite: Invite): JSX.Element {
