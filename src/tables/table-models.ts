@@ -1,29 +1,33 @@
 export type InviteStatus = 'created' | 'accepted' | 'rejected';
 
+export interface TableCreatePayload {
+  owner: string;
+  ownerUsername: string;
+  seats: number;
+  bots: number;
+}
+
+export interface InviteUpdatePayload {
+  status: InviteStatus;
+}
+
+export interface InviteCreatePayload {
+  recipientUsername: string;
+}
+
 export interface Invite {
-  invitee: string;
-  createdAt: Date;
+  recipient: string;
+  recipientUsername: string;
+  createdAt: string;
   status: InviteStatus;
 }
 
 export interface Table {
   _id: string;
-
   createdAt: string;
-
-  inviter: string;
-
-  // 3-6
+  owner: string;
+  ownerUsername: string;
   seats: number;
-
-  // 0 - (size -1)
   bots: number;
-
   invitations?: Invite[];
-}
-
-export interface TableCreatePayload {
-  inviter: string;
-  seats: number;
-  bots: number;
 }

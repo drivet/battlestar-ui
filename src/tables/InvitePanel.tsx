@@ -1,15 +1,16 @@
 import { useState } from 'react';
 
 import { useFirebaseAuth } from '../firebase/firebase-auth';
-import { getProfileByNickname } from '../profiles/profile-service';
+import { Username } from '../profiles/profile-models';
+import { getUsernames } from '../profiles/profile-service';
 
 export interface InvitePanelProps {
-  onSelectFn: (guest: string) => void;
+  onSelectFn: (guest: Username) => void;
 }
 
 export function InvitePanel(props: InvitePanelProps): JSX.Element {
   const user = useFirebaseAuth();
-  const [nickname, setNickname] = useState('');
+  const [username, setUsername] = useState('');
   const [updating, setUpdating] = useState(false);
   const [badName, setBadName] = useState<string | null>(null);
 
@@ -20,12 +21,12 @@ export function InvitePanel(props: InvitePanelProps): JSX.Element {
     }
     setUpdating(true);
     setBadName(null);
-    const profile = await getProfileByNickname(await user.getIdToken(true), nickname);
+    const usernameObjs = await getUsernames(await user.getIdToken(true), username);
     setUpdating(false);
-    if (!profile) {
-      setBadName(nickname);
+    if (!usernameObjs.length) {
+      setBadName(username);
     } else {
-      props.onSelectFn(profile.nickname);
+      props.onSelectFn(usernameObjs[0]);
     }
   }
 
@@ -47,8 +48,8 @@ export function InvitePanel(props: InvitePanelProps): JSX.Element {
               type="text"
               name="nickname"
               placeholder="Enter nickname"
-              onChange={(e) => setNickname(e.target.value)}
-              value={nickname}
+              onChange={(e) => setUsername(e.target.value)}
+              value={username}
             />
           </div>
           <div className="control">

@@ -16,7 +16,7 @@ export function GuestList(props: GuestListProps): JSX.Element {
   }
 
   function inviteLine(invite: Invite): JSX.Element {
-    return <div>{invite.invitee}</div>;
+    return <div>{invite.recipientUsername}</div>;
   }
 
   return (

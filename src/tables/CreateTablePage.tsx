@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 import { useFirebaseAuth } from '../firebase/firebase-auth';
 import { Page } from '../Page';
+import { getProfile } from '../profiles/profile-service';
 import { createTable } from './table-service';
 
 export function CreateTablePage(): JSX.Element {
@@ -16,8 +17,17 @@ export function CreateTablePage(): JSX.Element {
     if (!user) {
       throw new Error('user not signed in');
     }
-    await createTable(await user.getIdToken(true), user.uid, players, bots);
-    history.push('/invitations');
+    const profile = await getProfile(await user.getIdToken(true), user.uid);
+    if (!profile) {
+      throw new Error(`missing profile for ${user.uid}`);
+    }
+    await createTable(await user.getIdToken(true), {
+      owner: user.uid,
+      seats: players,
+      bots,
+      ownerUsername: profile.username,
+    });
+    history.push('/');
   }
 
   return (

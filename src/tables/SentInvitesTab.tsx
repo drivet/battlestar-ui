@@ -1,16 +1,13 @@
-import { format } from 'date-fns';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
+import { formatDate } from '../common/utils';
 import { useFirebaseAuth } from '../firebase/firebase-auth';
+import { Username } from '../profiles/profile-models';
 import { GuestList } from './GuestList';
 import { InvitePanel } from './InvitePanel';
-import { Table } from './table-models';
+import { InviteCreatePayload, Table } from './table-models';
 import { createInvite } from './table-service';
-
-function formatDate(dateStr: string): string {
-  return format(new Date(dateStr), 'yyyy-MM-dd HH:mm:ss');
-}
 
 function createButton(): JSX.Element {
   return <NavLink to="/create-table">New table</NavLink>;
@@ -30,11 +27,15 @@ export function SentInvitesTab(props: SentInvitesProps): JSX.Element {
   const user = useFirebaseAuth();
   const [inviteTable, setInviteTable] = useState<Table | null>(null);
 
-  async function handleSelect(table: Table | null, invited: string): Promise<void> {
+  async function handleSelect(
+    table: Table | null,
+    invited: string,
+    payload: InviteCreatePayload
+  ): Promise<void> {
     if (!table || !user) {
       return;
     }
-    await createInvite(await user.getIdToken(), table._id, invited);
+    await createInvite(await user.getIdToken(), table._id, invited, payload);
     setInviteTable(null);
     props.onInvite();
   }
@@ -44,7 +45,11 @@ export function SentInvitesTab(props: SentInvitesProps): JSX.Element {
       <div className={`modal ${inviteTable ? 'is-active' : ''}`}>
         <div className="modal-background"></div>
         <div className="modal-content">
-          <InvitePanel onSelectFn={(invited: string) => handleSelect(inviteTable, invited)} />
+          <InvitePanel
+            onSelectFn={(invited: Username) =>
+              handleSelect(inviteTable, invited.username, { recipientUsername: invited.username })
+            }
+          />
         </div>
         <button className="modal-close is-large" onClick={() => setInviteTable(null)}></button>
       </div>

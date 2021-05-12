@@ -13,7 +13,7 @@ export function InvitationsPage(): JSX.Element {
   const [selectedTab, setSelectedTab] = useState<number>(0);
   const [loading, setIsLoading] = useState<boolean>(true);
 
-  function loadingInd() {
+  function loadingIndicator() {
     return <div>Loading...</div>;
   }
 
@@ -26,11 +26,11 @@ export function InvitationsPage(): JSX.Element {
   }
 
   function extractSent(): Table[] {
-    return tables.filter((t) => t.inviter === user?.uid);
+    return tables.filter((t) => t.owner === user?.uid);
   }
 
   function extractReceived(): Table[] {
-    return tables.filter((t) => t.inviter !== user?.uid);
+    return tables.filter((t) => t.owner !== user?.uid);
   }
 
   async function handleDelete(tableId: string) {
@@ -66,7 +66,7 @@ export function InvitationsPage(): JSX.Element {
           </li>
         </ul>
       </div>
-      {loading ? loadingInd() : renderTab()}
+      {loading ? loadingIndicator() : renderTab()}
     </Page>
   );
 }

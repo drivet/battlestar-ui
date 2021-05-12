@@ -7,13 +7,11 @@ export const Page: React.FC = ({ children }) => {
     <div>
       <nav className="navbar">
         <div className="navbar-brand">
-          <NavLink className="navbar-item" to="/">
-            Home
-          </NavLink>
+          <div className="navbar-item">Home</div>
         </div>
         <div className="navbar-menu">
           <div className="navbar-start">
-            <NavLink className="navbar-item" to="/invitations">
+            <NavLink className="navbar-item" to="/">
               Invitations
             </NavLink>
           </div>

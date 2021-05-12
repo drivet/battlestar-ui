@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 import { getConfig } from '../config';
-import { Profile, ProfileUpdatePayload } from './profile-models';
+import { Profile, ProfileCreatePayload, Username } from './profile-models';
 
 const config = getConfig();
 
@@ -18,38 +18,18 @@ export async function getProfile(authToken: string, id: string): Promise<Profile
   }
 }
 
-export async function getProfileByNickname(
-  authToken: string,
-  nickname: string
-): Promise<Profile | null> {
-  const res = await axios.get(
-    `${config.apiBase}/profiles?nickname=${nickname}`,
-    reqConfig(authToken)
-  );
-  const profiles = res.data;
-  if (profiles.length === 0) {
-    return null;
-  }
-  return profiles[0];
-}
-
-export async function updateProfile(
-  authToken: string,
-  body: ProfileUpdatePayload,
-  id: string
-): Promise<Profile> {
-  const res = await axios.patch(`${config.apiBase}/profiles/${id}`, body, reqConfig(authToken));
-  return res.data;
-}
-
 export async function createProfile(
   authToken: string,
   id: string,
-  nickname: string
+  payload: ProfileCreatePayload
 ): Promise<Profile> {
-  const res = await axios.put(
-    `${config.apiBase}/profiles/${id}`,
-    { nickname },
+  const res = await axios.put(`${config.apiBase}/profiles/${id}`, payload, reqConfig(authToken));
+  return res.data;
+}
+
+export async function getUsernames(authToken: string, search: string): Promise<Username[]> {
+  const res = await axios.get(
+    `${config.apiBase}/profiles/usernames?search=${search}`,
     reqConfig(authToken)
   );
   return res.data;
