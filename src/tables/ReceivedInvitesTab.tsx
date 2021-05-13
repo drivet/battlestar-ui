@@ -22,7 +22,6 @@ export function ReceivedInvitesTab(props: ReceivedInvitesProps): JSX.Element {
   function tableHeader(): JSX.Element {
     return (
       <tr>
-        <th></th>
         <th>Created on</th>
         <th>Seats</th>
         <th>Bots</th>

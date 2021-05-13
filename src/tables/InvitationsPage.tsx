@@ -19,7 +19,11 @@ export function InvitationsPage(): JSX.Element {
 
   function renderTab(): JSX.Element {
     return selectedTab === 0 ? (
-      <SentInvitesTab tables={extractSent()} onDelete={handleDelete} onInvite={() => refresh()} />
+      <SentInvitesTab
+        tables={extractSent()}
+        onTableDelete={handleTableDelete}
+        onInvite={() => refresh()}
+      />
     ) : (
       <ReceivedInvitesTab tables={extractReceived()} />
     );
@@ -33,7 +37,7 @@ export function InvitationsPage(): JSX.Element {
     return tables.filter((t) => t.owner !== user?.uid);
   }
 
-  async function handleDelete(tableId: string) {
+  async function handleTableDelete(tableId: string) {
     if (!user) {
       console.warn('Trying to delete table with null user');
       return;
