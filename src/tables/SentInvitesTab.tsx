@@ -6,8 +6,7 @@ import { useFirebaseAuth } from '../firebase/firebase-auth';
 import { Username } from '../profiles/profile-models';
 import { InvitePanel } from './InvitePanel';
 import { SenderGuestList } from './SenderGuestList';
-import { Invite, InviteCreatePayload, Table } from './table-models';
-import { createInvite, deleteInvite } from './table-service';
+import { Invite, Table } from './table-models';
 
 function createButton(): JSX.Element {
   return <NavLink to="/create-table">New table</NavLink>;
@@ -20,31 +19,20 @@ function noTables(): JSX.Element {
 export interface SentInvitesProps {
   tables: Table[];
   onTableDelete: (tableId: string) => void;
-  onInvite: () => void;
+  onInvite: (table: Table, recipient: Username) => void;
+  onInviteDelete: (table: Table, invite: Invite) => void;
 }
 
 export function SentInvitesTab(props: SentInvitesProps): JSX.Element {
   const user = useFirebaseAuth();
   const [inviteTable, setInviteTable] = useState<Table | null>(null);
 
-  async function handleInviteDelete(table: Table, invite: Invite) {
-    if (!user) {
-      return;
-    }
-    await deleteInvite(await user.getIdToken(true), table._id, invite.recipient);
-  }
-
-  async function handleRecipientSelect(
-    table: Table | null,
-    recipient: string,
-    payload: InviteCreatePayload
-  ): Promise<void> {
+  async function handleRecipientSelect(table: Table | null, recipient: Username): Promise<void> {
     if (!table || !user) {
       return;
     }
-    await createInvite(await user.getIdToken(), table._id, recipient, payload);
     setInviteTable(null);
-    props.onInvite();
+    props.onInvite(table, recipient);
   }
 
   function inviteModal() {
@@ -53,11 +41,7 @@ export function SentInvitesTab(props: SentInvitesProps): JSX.Element {
         <div className="modal-background"></div>
         <div className="modal-content">
           <InvitePanel
-            onSelectFn={(recipient: Username) =>
-              handleRecipientSelect(inviteTable, recipient._id, {
-                recipientUsername: recipient.username,
-              })
-            }
+            onSelectFn={(recipient: Username) => handleRecipientSelect(inviteTable, recipient)}
           />
         </div>
         <button className="modal-close is-large" onClick={() => setInviteTable(null)}></button>
@@ -99,7 +83,7 @@ export function SentInvitesTab(props: SentInvitesProps): JSX.Element {
           <SenderGuestList
             table={table}
             inviteFn={() => setInviteTable(table)}
-            deleteFn={(invite) => handleInviteDelete(table, invite)}
+            deleteFn={(invite) => props.onInviteDelete(table, invite)}
           />
         </td>
       </tr>

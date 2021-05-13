@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 
 import { useFirebaseAuth } from '../firebase/firebase-auth';
 import { Page } from '../Page';
+import { Username } from '../profiles/profile-models';
 import { ReceivedInvitesTab } from './ReceivedInvitesTab';
 import { SentInvitesTab } from './SentInvitesTab';
-import { Table } from './table-models';
-import { deleteTable, getTables } from './table-service';
+import { Invite, Table } from './table-models';
+import { createInvite, deleteInvite, deleteTable, getTables } from './table-service';
 
 export function InvitationsPage(): JSX.Element {
   const user = useFirebaseAuth();
@@ -22,7 +23,8 @@ export function InvitationsPage(): JSX.Element {
       <SentInvitesTab
         tables={extractSent()}
         onTableDelete={handleTableDelete}
-        onInvite={() => refresh()}
+        onInvite={handleRecipientSelect}
+        onInviteDelete={handleInviteDelete}
       />
     ) : (
       <ReceivedInvitesTab tables={extractReceived()} />
@@ -39,10 +41,27 @@ export function InvitationsPage(): JSX.Element {
 
   async function handleTableDelete(tableId: string) {
     if (!user) {
-      console.warn('Trying to delete table with null user');
       return;
     }
     await deleteTable(await user.getIdToken(true), tableId);
+    refresh();
+  }
+
+  async function handleInviteDelete(table: Table, invite: Invite) {
+    if (!user) {
+      return;
+    }
+    await deleteInvite(await user.getIdToken(true), table._id, invite.recipient);
+    refresh();
+  }
+
+  async function handleRecipientSelect(table: Table, recipient: Username): Promise<void> {
+    if (!user) {
+      return;
+    }
+    await createInvite(await user.getIdToken(), table._id, recipient._id, {
+      recipientUsername: recipient.username,
+    });
     refresh();
   }
 
