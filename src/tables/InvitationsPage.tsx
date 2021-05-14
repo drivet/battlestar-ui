@@ -5,8 +5,8 @@ import { Page } from '../Page';
 import { Username } from '../profiles/profile-models';
 import { ReceivedInvitesTab } from './ReceivedInvitesTab';
 import { SentInvitesTab } from './SentInvitesTab';
-import { Invite, Table } from './table-models';
-import { createInvite, deleteInvite, deleteTable, getTables } from './table-service';
+import { Invite, InviteStatus, Table } from './table-models';
+import { createInvite, deleteInvite, deleteTable, getTables, updateInvite } from './table-service';
 
 export function InvitationsPage(): JSX.Element {
   const user = useFirebaseAuth();
@@ -27,7 +27,7 @@ export function InvitationsPage(): JSX.Element {
         onInviteDelete={handleInviteDelete}
       />
     ) : (
-      <ReceivedInvitesTab tables={extractReceived()} />
+      <ReceivedInvitesTab tables={extractReceived()} onInviteUpdate={handleInviteUpdate} />
     );
   }
 
@@ -37,6 +37,14 @@ export function InvitationsPage(): JSX.Element {
 
   function extractReceived(): Table[] {
     return tables.filter((t) => t.owner !== user?.uid);
+  }
+
+  async function handleInviteUpdate(table: Table, recipient: string, status: InviteStatus) {
+    if (!user) {
+      return;
+    }
+    await updateInvite(await user.getIdToken(true), table._id, recipient, { status });
+    refresh();
   }
 
   async function handleTableDelete(tableId: string) {

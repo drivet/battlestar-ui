@@ -1,7 +1,12 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { getConfig } from '../config';
-import { InviteCreatePayload, Table, TableCreatePayload } from './table-models';
+import {
+  InviteCreatePayload,
+  InviteUpdatePayload,
+  Table,
+  TableCreatePayload,
+} from './table-models';
 
 const config = getConfig();
 
@@ -28,6 +33,19 @@ export async function createInvite(
   payload: InviteCreatePayload
 ): Promise<AxiosResponse> {
   return axios.put(
+    `${config.apiBase}/tables/${id}/invitations/${recipient}`,
+    payload,
+    reqConfig(authToken)
+  );
+}
+
+export async function updateInvite(
+  authToken: string,
+  id: string,
+  recipient: string,
+  payload: InviteUpdatePayload
+): Promise<AxiosResponse> {
+  return axios.patch(
     `${config.apiBase}/tables/${id}/invitations/${recipient}`,
     payload,
     reqConfig(authToken)
