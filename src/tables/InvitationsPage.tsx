@@ -43,7 +43,7 @@ export function InvitationsPage(): JSX.Element {
     if (!user) {
       return;
     }
-    await updateInvite(await user.getIdToken(true), table._id, recipient, { status });
+    await updateInvite(table._id, recipient, { status });
     refresh();
   }
 
@@ -51,7 +51,7 @@ export function InvitationsPage(): JSX.Element {
     if (!user) {
       return;
     }
-    await deleteTable(await user.getIdToken(true), tableId);
+    await deleteTable(tableId);
     refresh();
   }
 
@@ -59,7 +59,7 @@ export function InvitationsPage(): JSX.Element {
     if (!user) {
       return;
     }
-    await deleteInvite(await user.getIdToken(true), table._id, invite.recipient);
+    await deleteInvite(table._id, invite.recipient);
     refresh();
   }
 
@@ -67,7 +67,7 @@ export function InvitationsPage(): JSX.Element {
     if (!user) {
       return;
     }
-    await createInvite(await user.getIdToken(), table._id, recipient._id, {
+    await createInvite(table._id, recipient._id, {
       recipientUsername: recipient.username,
     });
     refresh();
@@ -75,7 +75,7 @@ export function InvitationsPage(): JSX.Element {
 
   async function refresh() {
     if (user) {
-      const tables = await getTables(await user.getIdToken(true));
+      const tables = await getTables();
       setTables(tables);
       setIsLoading(false);
     }

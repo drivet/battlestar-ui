@@ -18,8 +18,7 @@ export function JoinPage(): JSX.Element {
     }
     const user = userCred.user;
 
-    const authToken = await user.getIdToken();
-    await createProfile(authToken, user.uid, { username });
+    await createProfile(user.uid, { username });
     await userCred.user.sendEmailVerification();
     setIsEmailSent(true);
   }

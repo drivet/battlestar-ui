@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 import { getConfig } from '../config';
 import {
@@ -10,66 +10,38 @@ import {
 
 const config = getConfig();
 
-export async function getTables(authToken: string): Promise<Table[]> {
-  const res = await axios.get(`${config.apiBase}/tables`, reqConfig(authToken));
+export async function getTables(): Promise<Table[]> {
+  const res = await axios.get(`${config.apiBase}/tables`);
   return res.data;
 }
 
-export async function createTable(authToken: string, payload: TableCreatePayload): Promise<Table> {
+export async function createTable(payload: TableCreatePayload): Promise<Table> {
   if (payload.bots > payload.seats - 1) {
     throw new Error(`Too many bots: ${payload.bots}`);
   }
-  return axios.post(`${config.apiBase}/tables`, payload, reqConfig(authToken));
+  return axios.post(`${config.apiBase}/tables`, payload);
 }
 
-export async function deleteTable(authToken: string, id: string): Promise<AxiosResponse> {
-  return axios.delete(`${config.apiBase}/tables/${id}`, reqConfig(authToken));
+export async function deleteTable(id: string): Promise<AxiosResponse> {
+  return axios.delete(`${config.apiBase}/tables/${id}`);
 }
 
 export async function createInvite(
-  authToken: string,
   id: string,
   recipient: string,
   payload: InviteCreatePayload
 ): Promise<AxiosResponse> {
-  return axios.put(
-    `${config.apiBase}/tables/${id}/invitations/${recipient}`,
-    payload,
-    reqConfig(authToken)
-  );
+  return axios.put(`${config.apiBase}/tables/${id}/invitations/${recipient}`, payload);
 }
 
 export async function updateInvite(
-  authToken: string,
   id: string,
   recipient: string,
   payload: InviteUpdatePayload
 ): Promise<AxiosResponse> {
-  return axios.patch(
-    `${config.apiBase}/tables/${id}/invitations/${recipient}`,
-    payload,
-    reqConfig(authToken)
-  );
+  return axios.patch(`${config.apiBase}/tables/${id}/invitations/${recipient}`, payload);
 }
 
-export async function deleteInvite(
-  authToken: string,
-  id: string,
-  recipient: string
-): Promise<AxiosResponse> {
-  return axios.delete(
-    `${config.apiBase}/tables/${id}/invitations/${recipient}`,
-    reqConfig(authToken)
-  );
-}
-
-function reqConfig(authToken: string | undefined): AxiosRequestConfig {
-  if (!authToken) {
-    return {};
-  }
-  return {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-  };
+export async function deleteInvite(id: string, recipient: string): Promise<AxiosResponse> {
+  return axios.delete(`${config.apiBase}/tables/${id}/invitations/${recipient}`);
 }

@@ -17,11 +17,11 @@ export function CreateTablePage(): JSX.Element {
     if (!user) {
       throw new Error('user not signed in');
     }
-    const profile = await getProfile(await user.getIdToken(true), user.uid);
+    const profile = await getProfile(user.uid);
     if (!profile) {
       throw new Error(`missing profile for ${user.uid}`);
     }
-    await createTable(await user.getIdToken(true), {
+    await createTable({
       owner: user.uid,
       seats: players,
       bots,

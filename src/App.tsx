@@ -1,6 +1,7 @@
 import './App.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import './firebase/firebase-init';
+import './firebase/firebase-axios';
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
