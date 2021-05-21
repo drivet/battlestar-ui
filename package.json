@@ -7,6 +7,7 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.3",
+    "@types/eventsource": "^1.1.5",
     "@types/gapi": "^0.0.39",
     "@types/gapi.auth2": "^0.0.54",
     "@types/jest": "^26.0.21",
@@ -30,6 +31,7 @@
     "react-google-login": "^5.2.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "rxjs": "^7.0.1",
     "typeface-roboto": "^1.1.13",
     "typescript": "^4.2.3",
     "web-vitals": "^1.1.1"

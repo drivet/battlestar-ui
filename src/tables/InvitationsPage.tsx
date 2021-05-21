@@ -6,10 +6,11 @@ import { Username } from '../profiles/profile-models';
 import { ReceivedInvitesTab } from './ReceivedInvitesTab';
 import { SentInvitesTab } from './SentInvitesTab';
 import { Invite, InviteStatus, Table } from './table-models';
-import { createInvite, deleteInvite, deleteTable, getTables, updateInvite } from './table-service';
+import { createInvite, deleteInvite, deleteTable, getTables$, updateInvite } from './table-service';
 
 export function InvitationsPage(): JSX.Element {
   const user = useFirebaseAuth();
+  const [token, setToken] = useState<string | undefined>(undefined);
   const [tables, setTables] = useState<Table[]>([]);
   const [selectedTab, setSelectedTab] = useState<number>(0);
   const [loading, setIsLoading] = useState<boolean>(true);
@@ -44,7 +45,6 @@ export function InvitationsPage(): JSX.Element {
       return;
     }
     await updateInvite(table._id, recipient, { status });
-    refresh();
   }
 
   async function handleTableDelete(tableId: string) {
@@ -52,7 +52,6 @@ export function InvitationsPage(): JSX.Element {
       return;
     }
     await deleteTable(tableId);
-    refresh();
   }
 
   async function handleInviteDelete(table: Table, invite: Invite) {
@@ -60,7 +59,6 @@ export function InvitationsPage(): JSX.Element {
       return;
     }
     await deleteInvite(table._id, invite.recipient);
-    refresh();
   }
 
   async function handleRecipientSelect(table: Table, recipient: Username): Promise<void> {
@@ -70,20 +68,28 @@ export function InvitationsPage(): JSX.Element {
     await createInvite(table._id, recipient._id, {
       recipientUsername: recipient.username,
     });
-    refresh();
-  }
-
-  async function refresh() {
-    if (user) {
-      const tables = await getTables();
-      setTables(tables);
-      setIsLoading(false);
-    }
   }
 
   useEffect(() => {
-    refresh();
-  }, [user ? user.uid : undefined]);
+    async function getToken() {
+      if (user) {
+        setToken(await user.getIdToken(true));
+      }
+    }
+    getToken();
+  }, [user?.uid]);
+
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+
+    const subscription = getTables$(token).subscribe((tables) => {
+      setTables(tables);
+      setIsLoading(false);
+    });
+    return () => subscription.unsubscribe();
+  }, [token]);
 
   return (
     <Page>
