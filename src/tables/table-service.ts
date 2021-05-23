@@ -1,8 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
-import { fromEventSourceUrl } from '../common/utils';
 import { getConfig } from '../config';
 import {
   InviteCreatePayload,
@@ -16,13 +13,6 @@ const config = getConfig();
 export async function getTables(): Promise<Table[]> {
   const res = await axios.get(`${config.apiBase}/tables`);
   return res.data;
-}
-
-export function getTables$(token?: string): Observable<Table[]> {
-  const url = token
-    ? `${config.apiBase}/tables/stream?authorization=${token}`
-    : `${config.apiBase}/tables/stream`;
-  return fromEventSourceUrl(url).pipe(map((e: MessageEvent) => JSON.parse(e.data)));
 }
 
 export async function createTable(payload: TableCreatePayload): Promise<Table> {

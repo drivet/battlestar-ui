@@ -6,7 +6,8 @@ import { Username } from '../profiles/profile-models';
 import { ReceivedInvitesTab } from './ReceivedInvitesTab';
 import { SentInvitesTab } from './SentInvitesTab';
 import { Invite, InviteStatus, Table } from './table-models';
-import { createInvite, deleteInvite, deleteTable, getTables$, updateInvite } from './table-service';
+import { createInvite, deleteInvite, deleteTable, updateInvite } from './table-service';
+import { getTables$ } from './table-stream';
 
 export function InvitationsPage(): JSX.Element {
   const user = useFirebaseAuth();
