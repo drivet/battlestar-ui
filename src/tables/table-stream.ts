@@ -42,5 +42,5 @@ function mergeChange(tables: Table[], change: FullChangeEvent<Table>): Table[] {
       tables.push(change.fullDocument);
     }
   }
-  return tables;
+  return [...tables];
 }

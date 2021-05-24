@@ -1,8 +1,24 @@
 import firebase from 'firebase';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
+import { useFirebaseAuth } from './firebase/firebase-auth';
+import { Profile } from './profiles/profile-models';
+import { getProfile } from './profiles/profile-service';
+
 export const Page: React.FC = ({ children }) => {
+  const user = useFirebaseAuth();
+  const [profile, setProfile] = useState<Profile | null>(null);
+
+  useEffect(() => {
+    async function profile() {
+      if (user) {
+        setProfile(await getProfile(user.uid));
+      }
+    }
+    profile();
+  }, [user?.uid]);
+
   return (
     <div>
       <nav className="navbar">
@@ -16,9 +32,7 @@ export const Page: React.FC = ({ children }) => {
             </NavLink>
           </div>
           <div className="navbar-end">
-            <NavLink className="navbar-item" to="/profile">
-              Profile
-            </NavLink>
+            <div className="navbar-item">Welcome {profile?.username}</div>
             <a className="navbar-item" onClick={() => firebase.auth().signOut()}>
               Sign out
             </a>
