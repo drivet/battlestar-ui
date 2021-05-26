@@ -9,9 +9,12 @@ export interface RecipientGuestListProps {
 
 export function RecipientGuestList(props: RecipientGuestListProps): JSX.Element {
   function acceptButton(invite: Invite): JSX.Element {
+    const disabled = invite.status === 'accepted';
     return (
       <button
+        title="Accept invite"
         className="button is-small"
+        disabled={disabled}
         onClick={() => props.inviteStatusFn(invite.recipient, 'accepted')}
       >
         {acceptIcon()}
@@ -20,9 +23,12 @@ export function RecipientGuestList(props: RecipientGuestListProps): JSX.Element 
   }
 
   function rejectButton(invite: Invite): JSX.Element {
+    const disabled = invite.status === 'rejected';
     return (
       <button
+        title="Reject invite"
         className="button is-small"
+        disabled={disabled}
         onClick={() => props.inviteStatusFn(invite.recipient, 'rejected')}
       >
         {rejectIcon()}
@@ -32,9 +38,11 @@ export function RecipientGuestList(props: RecipientGuestListProps): JSX.Element 
 
   function recipientControls(invite: Invite): JSX.Element {
     return (
-      <div className="columns">
-        <div className="column">{acceptButton(invite)}</div>
-        <div className="column">{rejectButton(invite)}</div>
+      <div className="level">
+        <div className="level-right">
+          <div className="level-item">{acceptButton(invite)}</div>
+          <div className="level-item">{rejectButton(invite)}</div>
+        </div>
       </div>
     );
   }
@@ -45,7 +53,7 @@ export function RecipientGuestList(props: RecipientGuestListProps): JSX.Element 
         <div className="column">{inviteStatus(invite)}</div>
         <div className="column">{invite.recipientUsername}</div>
         <div className="column">
-          {invite.recipient === props.user ? recipientControls(invite) : inviteStatus(invite)}
+          {invite.recipient === props.user ? recipientControls(invite) : null}
         </div>
       </div>
     );

@@ -85,7 +85,11 @@ export function InvitationsPage(): JSX.Element {
       return;
     }
 
-    const subscription = getTables$(token).subscribe((tables) => {
+    if (!user) {
+      return;
+    }
+
+    const subscription = getTables$(user.uid, token).subscribe((tables) => {
       setTables(tables);
       setIsLoading(false);
     });

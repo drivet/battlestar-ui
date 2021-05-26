@@ -7,6 +7,7 @@ import { Username } from '../profiles/profile-models';
 import { InvitePanel } from './InvitePanel';
 import { SenderGuestList } from './SenderGuestList';
 import { Invite, Table } from './table-models';
+import { canInvite } from './table-utils';
 
 function createButton(): JSX.Element {
   return <NavLink to="/create-table">New table</NavLink>;
@@ -49,6 +50,18 @@ export function SentInvitesTab(props: SentInvitesProps): JSX.Element {
     );
   }
 
+  function inviteButton(table: Table): JSX.Element {
+    return (
+      <button
+        title="Invite guest"
+        className="button is-small"
+        onClick={() => setInviteTable(table)}
+      >
+        Invite
+      </button>
+    );
+  }
+
   function tableList(tables: Table[]): JSX.Element {
     return (
       <table className="table">
@@ -66,7 +79,20 @@ export function SentInvitesTab(props: SentInvitesProps): JSX.Element {
         <th>Seats</th>
         <th>Bots</th>
         <th>Guests</th>
+        <th></th>
       </tr>
+    );
+  }
+
+  function guestList(table: Table): JSX.Element {
+    return table.invitations && table.invitations.length > 0 ? (
+      <SenderGuestList
+        table={table}
+        inviteFn={() => setInviteTable(table)}
+        deleteFn={(invite) => props.onInviteDelete(table, invite)}
+      />
+    ) : (
+      <div>No invites</div>
     );
   }
 
@@ -74,18 +100,17 @@ export function SentInvitesTab(props: SentInvitesProps): JSX.Element {
     return (
       <tr>
         <td>
-          <button className="delete" onClick={(_e) => props.onTableDelete(table._id)} />
+          <button
+            title="Delete table"
+            className="delete"
+            onClick={(_e) => props.onTableDelete(table._id)}
+          />
         </td>
         <td>{formatDate(table.createdAt)}</td>
         <td>{table.seats}</td>
         <td>{table.bots}</td>
-        <td>
-          <SenderGuestList
-            table={table}
-            inviteFn={() => setInviteTable(table)}
-            deleteFn={(invite) => props.onInviteDelete(table, invite)}
-          />
-        </td>
+        <td>{guestList(table)}</td>
+        <td>{canInvite(table) ? inviteButton(table) : null}</td>
       </tr>
     );
   }

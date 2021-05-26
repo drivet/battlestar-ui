@@ -26,10 +26,10 @@ export function pendingIcon(): JSX.Element {
 
 export function inviteStatus(invite: Invite): JSX.Element {
   if (invite.status === 'accepted') {
-    return acceptIcon();
+    return <div title="Invite accepted">{acceptIcon()}</div>;
   } else if (invite.status === 'rejected') {
-    return rejectIcon();
+    return <div title="Invite rejected">{rejectIcon()}</div>;
   } else {
-    return pendingIcon();
+    return <div title="Invite pending">{pendingIcon()}</div>;
   }
 }
